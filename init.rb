@@ -1,8 +1,8 @@
 Redmine::Plugin.register :redmine_project_specific_field do
   name 'Redmine Project Specific Field plugin'
-  author 'Author name'
-  description 'This is a plugin for Redmine'
+  author 'David S Anderson'
+  description 'Add the ability to create project specific custom fields'
   version '0.0.1'
-  url 'http://example.com/path/to/plugin'
-  author_url 'http://example.com/about'
+  url 'http://www.github.com/ande3577/redmine_project_specific_field'
+  author_url 'http://www.github.com/ande3577'
 end
