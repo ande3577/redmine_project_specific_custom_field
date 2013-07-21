@@ -1,3 +1,5 @@
+require_dependency 'project_specific_field_project_patch'
+
 Redmine::Plugin.register :redmine_project_specific_field do
   name 'Redmine Project Specific Field plugin'
   author 'David S Anderson'
