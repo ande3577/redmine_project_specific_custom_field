@@ -10,7 +10,7 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
   
   def setup
     @project = Project.where(:id => 1).first
-    @custom_field = ProjectSpecificIssueField.new(:name => 'custom_field', :field_format => 'float', :project => @project)
+    @custom_field = PSpecIssueCustomField.new(:name => 'custom_field', :field_format => 'float', :project => @project)
     assert @custom_field.save
     
     @admin = User.where(:admin => true).first
@@ -51,17 +51,17 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
   end
   
   def test_create
-    assert_difference ['ProjectSpecificIssueField.count'] do
+    assert_difference ['PSpecIssueCustomField.count'] do
           post :create, :project_id => @project.id, :project_specific_field => { :name => 'new_custom_field', :field_format => 'float' }
     end
     
     assert_equal 'new_custom_field', assigns(:custom_field).name
     assert_equal 'float', assigns(:custom_field).field_format
-    assert_equal assigns(:custom_field), ProjectSpecificIssueField.last
+    assert_equal assigns(:custom_field), PSpecIssueCustomField.last
   end
   
   def test_create_no_name
-    assert_difference ['ProjectSpecificIssueField.count'], 0 do
+    assert_difference ['PSpecIssueCustomField.count'], 0 do
           post :create, :project_id => @project.id, :project_specific_field => { :name => '', :field_format => 'float' }
     end
     
@@ -84,7 +84,7 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
   end
   
   def test_destroy
-    assert_difference ['ProjectSpecificIssueField.count'], -1 do
+    assert_difference ['PSpecIssueCustomField.count'], -1 do
       delete :destroy, :id => @custom_field.id
     end
     

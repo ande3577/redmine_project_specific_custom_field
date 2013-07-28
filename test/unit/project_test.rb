@@ -5,7 +5,7 @@ class ProjectTest < ActiveSupport::TestCase
   
   def setup
     @project = Project.first
-    @custom_field = ProjectSpecificIssueField.new(:name => 'custom_field', :field_format => 'float', :project => @project)
+    @custom_field = PSpecIssueCustomField.new(:name => 'custom_field', :field_format => 'float', :project => @project)
     assert @custom_field.save
   end
   
@@ -14,7 +14,7 @@ class ProjectTest < ActiveSupport::TestCase
   end
   
   def test_destoy_project
-    assert_difference ['ProjectSpecificIssueField.count', 'ProjectSpecificCustomFieldsProject.count'], -1 do
+    assert_difference ['PSpecIssueCustomField.count', 'ProjectSpecificCustomFieldsProject.count'], -1 do
       @project.destroy()
     end
   end

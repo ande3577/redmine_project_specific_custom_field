@@ -32,7 +32,7 @@ class ProjectSpecificFieldsController < ApplicationController
   end
 
   def create
-    @custom_field = ProjectSpecificIssueField.new(:project => @project)
+    @custom_field = PSpecIssueCustomField.new(:project => @project)
     @custom_field.update_attributes(params[:project_specific_field])
     if @custom_field.save
       redirect_to :action => :index, :project_id => @project.id
@@ -67,7 +67,7 @@ class ProjectSpecificFieldsController < ApplicationController
   private
   def find_field
     id = params[:id]
-    @custom_field = ProjectSpecificIssueField.where(:id => id).first unless id.nil?
+    @custom_field = PSpecIssueCustomField.where(:id => id).first unless id.nil?
     return render_404 if @custom_field.nil?
     @project = @custom_field.project
     return render_404 if @project.nil?

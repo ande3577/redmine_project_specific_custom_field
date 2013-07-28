@@ -1,4 +1,5 @@
-class ProjectSpecificIssueField < CustomField
+#The hideously abbreviated name for this class is to solve the redmine 30 character limit on custom field type names
+class PSpecIssueCustomField < CustomField
   unloadable
   
   attr_accessor 'project'
@@ -8,10 +9,6 @@ class ProjectSpecificIssueField < CustomField
   after_create 'create_projects'
   has_one :project_specific_custom_fields_project, :dependent => :destroy, :foreign_key => 'custom_field_id'
 
-  def type_name
-    :label_project_specific_issue_plural
-  end
-  
   validate do
     #if we get an error that the name has already been taken, and it is the only name error,
     # delete it if it is unique for the project
@@ -20,6 +17,10 @@ class ProjectSpecificIssueField < CustomField
         errors.delete(attribute)
       end
     end
+  end
+  
+  def type_name
+    :label_project_specific_issue_custom_field_plural
   end
   
   def initialize_project
