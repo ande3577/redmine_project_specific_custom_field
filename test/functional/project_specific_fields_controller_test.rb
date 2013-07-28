@@ -37,8 +37,17 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
     assert_equal @custom_field, assigns(:custom_field)
   end
   
+  def test_new
+    get :new, :id => @project.identifier
+    assert_response 200
+    
+    assert_not_nil assigns(:custom_field)
+    assert_equal @project, assigns(:custom_field).project
+    
+  end
+  
   def test_index
-    get :index, :project_id => @project.id
+    get :index, :id => @project.identifier
     assert_response 200
     
     assert_equal @project, assigns(:project)
@@ -46,13 +55,13 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
   end
   
   def test_index_invalid_id
-    get :index, :project_id => 99
+    get :index, :id => 99
     assert_response 404
   end
   
   def test_create
     assert_difference ['PSpecIssueCustomField.count'] do
-          post :create, :project_id => @project.id, :project_specific_field => { :name => 'new_custom_field', :field_format => 'float' }
+          post :create, :id => @project.identifier, :p_spec_issue_custom_field => { :name => 'new_custom_field', :field_format => 'float' }
     end
     
     assert_equal 'new_custom_field', assigns(:custom_field).name
@@ -62,7 +71,7 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
   
   def test_create_no_name
     assert_difference ['PSpecIssueCustomField.count'], 0 do
-          post :create, :project_id => @project.id, :project_specific_field => { :name => '', :field_format => 'float' }
+          post :create, :id => @project.identifier, :p_spec_issue_custom_field => { :name => '', :field_format => 'float' }
     end
     
     assert_response 200
@@ -73,9 +82,9 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
   end
   
   def test_update
-    post :update, :id => @custom_field.id, :project_specific_field => { :name => 'rename_field', :field_format => 'string' }
+    post :update, :id => @custom_field.id, :p_spec_issue_custom_field => { :name => 'rename_field', :field_format => 'string' }
     
-    assert_redirected_to :action => :index, :project_id => @project.id
+    assert_redirected_to :action => :index, :id => @project.identifier
     
     @custom_field.reload
     
@@ -88,14 +97,14 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
       delete :destroy, :id => @custom_field.id
     end
     
-    assert_redirected_to :action => :index, :project_id => @project.id
+    assert_redirected_to :action => :index, :id => @project.identifier
   end
   
   def test_without_permission
     user = User.find(2)
     @request.session[:user_id] = user.id
       
-    get :index, :project_id => @project.id
+    get :index, :id => @project.identifier
     assert_response 403
   end
   
@@ -104,7 +113,7 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
     @request.session[:user_id] = user.id
     Role.find(1).add_permission! :manage_project_custom_fields
       
-    get :index, :project_id => @project.id
+    get :index, :id => @project.identifier
     assert_response 200
   end
   

@@ -1,1 +1,32 @@
-<h2>ProjectSpecificFieldControllerController#index</h2>
+<table class="list">
+  <thead><tr>
+    <th width="30%"><%=l(:field_name)%></th>
+    <th><%=l(:field_field_format)%></th>
+    <th><%=l(:field_is_required)%></th>
+    <th><%=l(:field_is_for_all)%></th>
+    <th><%=l(:label_used_by)%></th>
+    <th><%=l(:button_sort)%></th>
+    <%if User.current().allowed_to?(:delete_project_custom_fields, @project) %>
+      <th width="10%"></th>
+    <% end %>
+  </tr></thead>
+  <tbody>
+  <% (@custom_fields || []).sort.each do |custom_field| -%>
+    <tr class="<%= cycle("odd", "even") %>">
+      <td><%= link_to h(custom_field.name), edit_custom_field_path(custom_field) %></td>
+      <td align="center"><%= l(Redmine::CustomFieldFormat.label_for(custom_field.field_format)) %></td>
+      <td align="center"><%= checked_image custom_field.is_required? %></td>
+      <td align="center"><%= checked_image custom_field.is_for_all? %></td>
+      <td align="center"><%= l(:label_x_projects, :count => custom_field.projects.count) if custom_field.is_a? IssueCustomField and !custom_field.is_for_all? %></td>
+      <td align="center" style="width:15%;"><%= reorder_links('p_spec_issue_custom_field', {:controller => :project_specific_fields, :action => 'update', :id => custom_field}, :put) %></td>
+      <%if User.current().allowed_to?(:delete_project_custom_fields, @project) %>
+        <td class="buttons">
+          <%= delete_link :controller => :project_specific_fields, :action => :destroy, :id => custom_field %>
+        </td>
+      <% end %>
+    </tr>
+  <% end; reset_cycle %>
+  </tbody>
+</table>
+
+<p><%= link_to l(:label_custom_field_new), { :controller => :project_specific_fields, :action => :new, :id => @project.identifier }, :class => 'icon icon-add' %></p>

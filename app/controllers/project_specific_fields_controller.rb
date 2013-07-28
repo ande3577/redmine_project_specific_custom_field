@@ -4,12 +4,13 @@ class ProjectSpecificFieldsController < ApplicationController
   before_filter :find_field, :except => [:index, :new, :create]
   before_filter :find_project, :only => [:index, :new, :create]
   before_filter :authorize
+  before_filter :build_field_from_params, :only => [:new, :create]
+  
+  helper 'custom_fields'
 
   def show
     respond_to do |format|
       format.html
-      format.json
-      format.xml
     end
   end
 
@@ -18,24 +19,19 @@ class ProjectSpecificFieldsController < ApplicationController
     
     respond_to do |format|
       format.html
-      format.json
-      format.xml
     end
   end
 
   def new
     respond_to do |format|
       format.html
-      format.json
-      format.xml
+      format.js
     end
   end
 
   def create
-    @custom_field = PSpecIssueCustomField.new(:project => @project)
-    @custom_field.update_attributes(params[:project_specific_field])
     if @custom_field.save
-      redirect_to :action => :index, :project_id => @project.id
+      redirect_to :action => :index, :id => @project.identifier
       return
     end
     render :action => :new
@@ -44,15 +40,13 @@ class ProjectSpecificFieldsController < ApplicationController
   def edit
     respond_to do |format|
       format.html
-      format.json
-      format.xml
     end
   end
 
   def update
-    @custom_field.update_attributes(params[:project_specific_field])
+    @custom_field.update_attributes(params[:p_spec_issue_custom_field])
     if @custom_field.save
-      redirect_to :action => :index, :project_id => @project.id
+      redirect_to :action => :index, :id => @project.identifier
       return
     end
     render :action => :edit
@@ -61,7 +55,7 @@ class ProjectSpecificFieldsController < ApplicationController
   def destroy
     @custom_field.destroy
     
-    redirect_to :action => :index, :project_id => @project.id
+    redirect_to :action => :index, :id => @project.identifier
   end
   
   private
@@ -74,12 +68,17 @@ class ProjectSpecificFieldsController < ApplicationController
   end
   
   def find_project
-    project_id = params[:project_id]
-    @project = Project.where(:id => project_id).first unless project_id.nil?
+    project_id = params[:id]
+    @project = Project.where(:identifier => project_id).first unless project_id.nil?
     return render_404 if @project.nil?
   end
   
   def authorize
     return deny_access if !User.current.allowed_to?({:controller => :project_specific_fields, :action => params[:action]}, @project, :global => false)
+  end
+  
+  def build_field_from_params
+    @custom_field = PSpecIssueCustomField.new(params[:p_spec_issue_custom_field])
+    @custom_field.project = @project
   end
 end

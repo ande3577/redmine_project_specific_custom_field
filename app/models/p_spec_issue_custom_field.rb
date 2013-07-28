@@ -33,6 +33,10 @@ class PSpecIssueCustomField < CustomField
     self.project.save
   end
   
+  def self.customized_class
+    Issue
+  end
+  
   private
   def name_unique_for_project?()
     for f in IssueCustomField.all + self.project.project_specific_issue_custom_fields
