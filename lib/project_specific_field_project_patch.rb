@@ -19,6 +19,11 @@ module ProjectSpecificFieldProjectPatch
   end
   
   module InstanceMethods
+    def recursive_project_specific_issue_fields
+      fields = []
+      fields += self.parent.recursive_project_specific_issue_fields unless self.parent.nil?
+      fields + self.project_specific_issue_custom_fields.sorted.all
+    end
   end
   
   def destroy_project_specific_custom_fields

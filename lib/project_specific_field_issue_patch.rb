@@ -16,7 +16,9 @@ module ProjectSpecificFieldIssuePatch
   end
   
   def available_custom_fields_with_project_specific
-    available_custom_fields_without_project_specific + self.project.project_specific_issue_custom_fields.sorted.all
+    fields = available_custom_fields_without_project_specific
+    fields += self.project.recursive_project_specific_issue_fields
+    fields
   end
   
 end

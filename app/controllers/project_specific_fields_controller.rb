@@ -15,7 +15,7 @@ class ProjectSpecificFieldsController < ApplicationController
   end
 
   def index
-    @custom_fields = @project.project_specific_issue_custom_fields
+    @custom_fields = @project.recursive_project_specific_issue_fields
     
     respond_to do |format|
       format.html
