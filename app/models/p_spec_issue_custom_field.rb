@@ -2,6 +2,8 @@
 class PSpecIssueCustomField < CustomField
   unloadable
   
+  include Redmine::I18n
+  
   attr_accessor 'project'
   
   validates_presence_of 'project'
@@ -13,7 +15,7 @@ class PSpecIssueCustomField < CustomField
     #if we get an error that the name has already been taken, and it is the only name error,
     # delete it if it is unique for the project
     errors.each do |attribute, error|
-      if attribute == :name and errors.get(attribute).size == 1 and error == "has already been taken" and name_unique_for_project?()
+      if attribute == :name and errors.get(attribute).size == 1 and error == I18n.t(:taken, scope: [:activerecord, :errors, :messages]) and name_unique_for_project?()
         errors.delete(attribute)
       end
     end
