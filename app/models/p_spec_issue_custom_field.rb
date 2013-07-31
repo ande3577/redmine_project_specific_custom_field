@@ -42,7 +42,7 @@ class PSpecIssueCustomField < CustomField
   private
   def name_unique_for_project?()
     for f in IssueCustomField.all + self.project.project_specific_issue_custom_fields
-      if (self.name == f.name) and (self.field_format == f.field_format)
+      if (self.name == f.name) and (self.field_format == f.field_format) and (f != self)
         return false
       end
     end
