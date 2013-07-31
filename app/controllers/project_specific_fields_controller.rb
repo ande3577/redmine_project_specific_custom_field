@@ -1,22 +1,14 @@
 class ProjectSpecificFieldsController < ApplicationController
   unloadable
 
-  before_filter :find_field, :except => [:index, :new, :create]
-  before_filter :find_project, :only => [:index, :new, :create]
+  before_filter :find_field, :except => [:new, :create]
+  before_filter :find_project, :only => [:new, :create]
   before_filter :authorize
   before_filter :build_field_from_params, :only => [:new, :create]
   
   helper 'custom_fields'
 
   def show
-    respond_to do |format|
-      format.html
-    end
-  end
-
-  def index
-    @custom_fields = @project.recursive_project_specific_issue_fields
-    
     respond_to do |format|
       format.html
     end
@@ -31,7 +23,7 @@ class ProjectSpecificFieldsController < ApplicationController
 
   def create
     if @custom_field.save
-      redirect_to :action => :index, :id => @project.identifier
+      redirect_to_index
       return
     end
     render :action => :new
@@ -46,7 +38,7 @@ class ProjectSpecificFieldsController < ApplicationController
   def update
     @custom_field.update_attributes(params[:p_spec_issue_custom_field])
     if @custom_field.save
-      redirect_to :action => :index, :id => @project.identifier
+      redirect_to_index
       return
     end
     render :action => :edit
@@ -54,8 +46,7 @@ class ProjectSpecificFieldsController < ApplicationController
 
   def destroy
     @custom_field.destroy
-    
-    redirect_to :action => :index, :id => @project.identifier
+    redirect_to_index    
   end
   
   private
@@ -80,5 +71,9 @@ class ProjectSpecificFieldsController < ApplicationController
   def build_field_from_params
     @custom_field = PSpecIssueCustomField.new(params[:p_spec_issue_custom_field])
     @custom_field.project = @project
+  end
+  
+  def redirect_to_index
+    redirect_to "/projects/#{@project.identifier}/settings/custom_fields"
   end
 end

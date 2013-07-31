@@ -43,30 +43,18 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
     
     assert_not_nil assigns(:custom_field)
     assert_equal @project, assigns(:custom_field).project
-    
-  end
-  
-  def test_index
-    get :index, :id => @project.identifier
-    assert_response 200
-    
-    assert_equal @project, assigns(:project)
-    assert assigns(:custom_fields).include?(@custom_field)
-  end
-  
-  def test_index_invalid_id
-    get :index, :id => 99
-    assert_response 404
   end
   
   def test_create
     assert_difference ['PSpecIssueCustomField.count'] do
           post :create, :id => @project.identifier, :p_spec_issue_custom_field => { :name => 'new_custom_field', :field_format => 'float' }
     end
-    
+        
     assert_equal 'new_custom_field', assigns(:custom_field).name
     assert_equal 'float', assigns(:custom_field).field_format
     assert_equal assigns(:custom_field), PSpecIssueCustomField.last
+    
+    assert_redirected_to index_url
   end
   
   def test_create_no_name
@@ -84,7 +72,7 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
   def test_update
     post :update, :id => @custom_field.id, :p_spec_issue_custom_field => { :name => 'rename_field', :field_format => 'string' }
     
-    assert_redirected_to :action => :index, :id => @project.identifier
+    assert_redirected_to index_url
     
     @custom_field.reload
     
@@ -97,14 +85,14 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
       delete :destroy, :id => @custom_field.id
     end
     
-    assert_redirected_to :action => :index, :id => @project.identifier
+    assert_redirected_to index_url
   end
   
   def test_without_permission
     user = User.find(2)
     @request.session[:user_id] = user.id
       
-    get :index, :id => @project.identifier
+    get :edit, :id => @custom_field.id
     assert_response 403
   end
   
@@ -113,8 +101,12 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
     @request.session[:user_id] = user.id
     Role.find(1).add_permission! :manage_project_custom_fields
       
-    get :index, :id => @project.identifier
+    get :edit, :id => @custom_field.id
     assert_response 200
+  end
+  
+  def index_url
+    "/projects/#{@project.identifier}/settings/custom_fields"
   end
   
 end

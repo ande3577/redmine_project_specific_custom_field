@@ -9,7 +9,7 @@
     <% end %>
   </tr></thead>
   <tbody>
-  <% (@custom_fields || []).sort.each do |custom_field| -%>
+  <% (custom_fields || []).sort.each do |custom_field| -%>
     <tr class="<%= cycle("odd", "even") %>">
       <% if custom_field.project == @project %>
         <td><%= link_to h(custom_field.name), {:controller => :project_specific_fields, :action => 'edit', :id => custom_field} %></td>
