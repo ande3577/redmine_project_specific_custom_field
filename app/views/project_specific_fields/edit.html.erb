@@ -2,6 +2,7 @@
 
 <%= labelled_form_for [@project, @custom_field], :url => {:controller => :project_specific_fields, :action => :update, :id => @custom_field }, :html => {:id => 'custom_field_form'} do |f| %>
 <%= render :partial => 'custom_fields/form', :locals => { :f => f } %>
+<%= render :partial => 'issue_specific_options', :locals => { :f => f } %>
 <%= hidden_field_tag 'type', @custom_field.type %>
 <%= submit_tag l(:button_save) %>
 <% end %>

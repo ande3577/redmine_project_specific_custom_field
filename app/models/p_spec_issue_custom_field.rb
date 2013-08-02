@@ -10,6 +10,7 @@ class PSpecIssueCustomField < CustomField
   after_initialize 'initialize_project'
   after_create 'create_projects'
   has_one :project_specific_custom_fields_project, :dependent => :destroy, :foreign_key => 'custom_field_id'
+  has_and_belongs_to_many :trackers, :join_table => "#{table_name_prefix}custom_fields_trackers#{table_name_suffix}", :foreign_key => "custom_field_id"
 
   validate do
     #if we get an error that the name has already been taken, and it is the only name error,
