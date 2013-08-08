@@ -70,6 +70,9 @@ class ProjectSpecificFieldsController < ApplicationController
   
   def build_field_from_params
     @custom_field = PSpecIssueCustomField.new(params[:p_spec_issue_custom_field])
+    if params[:p_spec_issue_custom_field]
+      @custom_field.share_with_subprojects = params[:p_spec_issue_custom_field][:share_with_subprojects] # force the update to be manual
+    end
     @custom_field.project = @project
   end
   

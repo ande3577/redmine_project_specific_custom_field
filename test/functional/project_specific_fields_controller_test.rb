@@ -47,12 +47,13 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
   
   def test_create
     assert_difference ['PSpecIssueCustomField.count'] do
-          post :create, :id => @project.identifier, :p_spec_issue_custom_field => { :name => 'new_custom_field', :field_format => 'float' }
+          post :create, :id => @project.identifier, :p_spec_issue_custom_field => { :name => 'new_custom_field', :field_format => 'float', :share_with_subprojects => true }
     end
         
     assert_equal 'new_custom_field', assigns(:custom_field).name
     assert_equal 'float', assigns(:custom_field).field_format
     assert_equal assigns(:custom_field), PSpecIssueCustomField.last
+    assert assigns(:custom_field).share_with_subprojects?
     
     assert_redirected_to index_url
   end
@@ -67,6 +68,11 @@ class ProjectSpecificFieldsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:custom_field)
     assert_equal 'float', assigns(:custom_field).field_format
     assert_not_empty assigns(:custom_field).errors 
+  end
+  
+  def test_create_dont_share
+    post :create, :id => @project.identifier, :p_spec_issue_custom_field => { :name => 'new_custom_field', :field_format => 'float' }
+    assert !assigns(:custom_field).share_with_subprojects?
   end
   
   def test_update

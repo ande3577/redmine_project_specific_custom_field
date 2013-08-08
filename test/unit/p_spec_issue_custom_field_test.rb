@@ -18,6 +18,13 @@ class PSpecIssueCustomFieldTest < ActiveSupport::TestCase
     assert_equal 'float', @custom_field.field_format
     assert_equal :label_project_specific_issue_custom_field_plural, @custom_field.type_name 
     assert_equal @custom_field, @project.project_specific_issue_custom_fields.first
+    assert PSpecIssueCustomField.last.share_with_subprojects?
+  end
+  
+  def test_save_set_share_with_subprojects_to_false
+    @custom_field.share_with_subprojects = false
+    assert @custom_field.save
+    assert !PSpecIssueCustomField.last.share_with_subprojects?
   end
   
   def test_duplicate

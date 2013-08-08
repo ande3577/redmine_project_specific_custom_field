@@ -5,10 +5,13 @@ class PSpecIssueCustomField < CustomField
   include Redmine::I18n
   
   attr_accessor 'project'
+  attr_accessor 'share_with_subprojects'
   
   validates_presence_of 'project'
   after_initialize 'initialize_project'
+  after_initialize 'initialize_share_with_subproject'
   after_create 'create_projects'
+  after_save 'update_share_with_subprojects'
   has_one :project_specific_custom_fields_project, :dependent => :destroy, :foreign_key => 'custom_field_id'
   has_and_belongs_to_many :trackers, :join_table => "#{table_name_prefix}custom_fields_trackers#{table_name_suffix}", :foreign_key => "custom_field_id"
 
@@ -31,8 +34,13 @@ class PSpecIssueCustomField < CustomField
   end
   
   def initialize_project
-    cfp = ProjectSpecificCustomFieldsProject.where(:custom_field_id => self.id).first unless self.id.nil?
+    cfp = custom_field_project
     self.project = cfp.project unless cfp.nil?
+  end
+  
+  def initialize_share_with_subproject
+    cfp = custom_field_project
+    self.share_with_subprojects = cfp.nil? ? true : cfp.share_with_subprojects
   end
   
   def create_projects
@@ -40,8 +48,18 @@ class PSpecIssueCustomField < CustomField
     self.project.save
   end
   
+  def update_share_with_subprojects
+    cfp = custom_field_project
+    cfp.share_with_subprojects = self.share_with_subprojects
+    cfp.save
+  end
+  
   def self.customized_class
     Issue
+  end
+  
+  def share_with_subprojects?
+    self.share_with_subprojects
   end
   
   private
@@ -52,6 +70,10 @@ class PSpecIssueCustomField < CustomField
       end
     end
     true
+  end
+  
+  def custom_field_project
+    ProjectSpecificCustomFieldsProject.where(:custom_field_id => self.id).first unless self.id.nil?
   end
   
 end

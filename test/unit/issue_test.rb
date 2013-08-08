@@ -9,7 +9,7 @@ class IssueTest < ActiveSupport::TestCase
   
   def setup
     @project = Project.first
-    @custom_field = PSpecIssueCustomField.new(:name => 'custom_field', :field_format => 'string', :project => @project, :searchable => true)
+    @custom_field = PSpecIssueCustomField.new(:name => 'custom_field', :field_format => 'string', :project => @project, :searchable => true, :share_with_subprojects => true)
     assert @custom_field.save
   end
   
@@ -36,6 +36,13 @@ class IssueTest < ActiveSupport::TestCase
   def test_inherit_from_parent
     add_tracker(1)
     assert Issue.find(6).available_custom_fields.include?(@custom_field)
+  end
+  
+  def test_do_no_inherit_from_parent
+    @custom_field.share_with_subprojects = false
+    @custom_field.save
+    add_tracker(1)
+    assert !Issue.find(6).available_custom_fields.include?(@custom_field)
   end
   
   def test_search

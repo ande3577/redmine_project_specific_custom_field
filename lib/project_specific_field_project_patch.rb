@@ -21,8 +21,15 @@ module ProjectSpecificFieldProjectPatch
   module InstanceMethods
     def recursive_project_specific_issue_fields
       fields = []
-      fields += self.parent.recursive_project_specific_issue_fields unless self.parent.nil?
+      fields += self.parent.recursive_project_specific_issue_fields_from_parent unless self.parent.nil?
       fields + self.project_specific_issue_custom_fields.sorted.all
+    end
+    
+    def recursive_project_specific_issue_fields_from_parent
+      fields = []
+      fields += self.parent.recursive_project_specific_issue_fields_from_parent unless self.parent.nil?
+      fields += self.project_specific_issue_custom_fields.sorted.all.select  { |f| f.share_with_subprojects? }
+      fields
     end
   end
   
