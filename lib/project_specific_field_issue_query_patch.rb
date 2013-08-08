@@ -6,6 +6,7 @@ module ProjectSpecificIssueQueryPatch
     base.send(:include, InstanceMethods)
     base.class_eval do
       alias_method_chain :initialize_available_filters, :project_specific
+      alias_method_chain :available_columns, :project_specific
     end
   end
   
@@ -16,14 +17,25 @@ module ProjectSpecificIssueQueryPatch
   end
   
   def initialize_available_filters_with_project_specific
-    print "\nadding project specific filters\n"
     initialize_available_filters_without_project_specific
     if project
       project.recursive_project_specific_issue_fields.each do |field|
-        print "\nadding filter for #{field.name}\n"
         add_custom_field_filter(field) if field.visible
       end
     end
+  end
+  
+  def available_columns_with_project_specific
+    return @available_columns if @available_columns
+    @available_columns = available_columns_without_project_specific
+    
+    if project
+      project.recursive_project_specific_issue_fields.each do |field|
+        @available_columns << QueryCustomFieldColumn.new(field) if field.visible
+      end
+    end
+    
+    @available_columns
   end
   
 end

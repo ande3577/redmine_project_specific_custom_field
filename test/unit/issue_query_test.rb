@@ -19,4 +19,12 @@ class IssueQueryTest < ActiveSupport::TestCase
     assert_equal initial_size + 1, final_size
   end
   
+  def test_available_columns
+    initial_size = IssueQuery.first.available_columns.count
+    assert @custom_field.save
+    @query.reload
+    final_size = IssueQuery.first.available_columns.count
+    assert_equal initial_size + 1, final_size
+  end
+  
 end
