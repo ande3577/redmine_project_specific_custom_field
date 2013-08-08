@@ -1,5 +1,6 @@
 require_dependency 'project_specific_field_project_patch'
 require_dependency 'project_specific_field_issue_patch'
+require_dependency 'project_specific_field_issue_query_patch'
 require_dependency 'project_specific_field_projects_helper_patch'
 
 Redmine::Plugin.register :redmine_project_specific_custom_field do
