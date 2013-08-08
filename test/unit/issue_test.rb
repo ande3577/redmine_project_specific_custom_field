@@ -4,10 +4,12 @@ class IssueTest < ActiveSupport::TestCase
   fixtures :projects
   fixtures :issues 
   fixtures :trackers
+  fixtures :users
+  fixtures :enabled_modules
   
   def setup
     @project = Project.first
-    @custom_field = PSpecIssueCustomField.new(:name => 'custom_field', :field_format => 'float', :project => @project)
+    @custom_field = PSpecIssueCustomField.new(:name => 'custom_field', :field_format => 'string', :project => @project, :searchable => true)
     assert @custom_field.save
   end
   
@@ -34,6 +36,23 @@ class IssueTest < ActiveSupport::TestCase
   def test_inherit_from_parent
     add_tracker(1)
     assert Issue.find(6).available_custom_fields.include?(@custom_field)
+  end
+  
+  def test_search
+    User.current = User.where(:admin => true).first
+      
+    issue = Issue.find(1)
+    v = CustomValue.new(:custom_field => @custom_field, :customized => issue, :value => '1.234')
+    assert v.save
+    
+    #proof that setup is correct
+    r = Issue.search('%unable to print recipes%').first
+    assert r.include?(issue)
+    
+    assert_equal @custom_field, PSpecIssueCustomField.where(:searchable => true).first
+    
+    r = Issue.search('%1.234%').first
+    assert r.include?(issue)
   end
   
   def add_tracker(tracker_id)
