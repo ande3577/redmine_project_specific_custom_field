@@ -17,11 +17,11 @@
     <p>
       <label><%= l(:field_visible) %></label>
       <label class="block">
-        <%= radio_button_tag 'p_spec_issue_custom_field[visible]', 1, @custom_field.visible?, :id => 'custom_field_visible_on' %>
+        <%= radio_button_tag 'p_spec_issue_custom_field[visible]', 1, @custom_field.visible?, :id => 'p_spec_issue_custom_field_visible_on' %>
         <%= l(:label_visibility_public) %>
       </label>
       <label class="block">
-        <%= radio_button_tag 'p_spec_issue_custom_field[visible]', 0, !@custom_field.visible?, :id => 'custom_field_visible_off' %>
+        <%= radio_button_tag 'p_spec_issue_custom_field[visible]', 0, !@custom_field.visible?, :id => 'p_spec_issue_custom_field_visible_off' %>
         <%= l(:label_visibility_roles) %>:
       </label>
       <% Role.givable.sorted.each do |role| %>
@@ -33,3 +33,12 @@
       <%= hidden_field_tag 'p_spec_issue_custom_field[role_ids][]', '' %>
     </p>
 </div>
+
+<%= javascript_tag do %>
+function toggleCustomFieldRoles(){
+  var checked = $("#p_spec_issue_custom_field_visible_on").is(':checked');
+  $('.custom_field_role input').attr('disabled', checked);
+}
+$("#p_spec_issue_custom_field_visible_on, #p_spec_issue_custom_field_visible_off").change(toggleCustomFieldRoles);
+$(document).ready(toggleCustomFieldRoles);
+<% end %>

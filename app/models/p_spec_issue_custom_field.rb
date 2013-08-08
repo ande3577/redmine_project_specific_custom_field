@@ -26,6 +26,10 @@ class PSpecIssueCustomField < CustomField
     :label_project_specific_issue_custom_field_plural
   end
   
+  def visible_by?(project, user=User.current)
+    super || (roles & user.roles_for_project(project)).present?
+  end
+  
   def initialize_project
     cfp = ProjectSpecificCustomFieldsProject.where(:custom_field_id => self.id).first unless self.id.nil?
     self.project = cfp.project unless cfp.nil?
