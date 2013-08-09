@@ -19,8 +19,13 @@ module ProjectSpecificIssueQueryPatch
   def initialize_available_filters_with_project_specific
     initialize_available_filters_without_project_specific
     if project
-      project.recursive_project_specific_issue_fields.each do |field|
-        add_custom_field_filter(field) if field.visible
+      begin
+        project.recursive_project_specific_issue_fields.each do |field|
+          add_custom_field_filter(field) if field.visible
+        end
+      rescue
+        # provide support for redmine 2.3
+        add_custom_fields_filters(project.recursive_project_specific_issue_fields.select { |f| f.visible })
       end
     end
   end

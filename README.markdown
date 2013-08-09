@@ -1,6 +1,6 @@
 # redmine_project_specific_field
 
-Works on redmine 2.4.x, should work under 2.3.x as well
+Tested on redmine 2.4.x and 2.3.x
 
 
 ## Overview

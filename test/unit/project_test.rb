@@ -10,7 +10,7 @@ class ProjectTest < ActiveSupport::TestCase
   end
   
   def test_get_project_custom_field
-    assert @project.project_specific_issue_custom_fields.visible.include?(@custom_field)
+    assert @project.project_specific_issue_custom_fields.include?(@custom_field)
   end
   
   def test_destoy_project

@@ -30,8 +30,10 @@ module ProjectSpecificFieldIssuePatch
         PSpecIssueCustomField.where(:searchable => true).each do |field|
           sql = "#{table_name}.id IN (SELECT customized_id FROM #{CustomValue.table_name}" +
             " WHERE customized_type='#{self.name}' AND customized_id=#{table_name}.id AND LOWER(value) LIKE ?" +
-            " AND #{CustomValue.table_name}.custom_field_id = #{field.id})" +
-            " AND #{field.visibility_by_project_condition(searchable_options[:project_key], user)}"
+            " AND #{CustomValue.table_name}.custom_field_id = #{field.id})"
+          if PSpecIssueCustomField.method_defined?(:visibility_by_project_condition)
+              sql += " AND #{field.visibility_by_project_condition(searchable_options[:project_key], user)}"
+          end
           token_clauses << sql
         end
       end
