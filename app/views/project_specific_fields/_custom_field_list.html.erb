@@ -13,7 +13,7 @@
     <tr class="<%= cycle("odd", "even") %>">
       <% if custom_field.project == @project %>
         <td><%= link_to h(custom_field.name), {:controller => :project_specific_fields, :action => 'edit', :id => custom_field} %></td>
-        <td align="center"><%= l(Redmine::CustomFieldFormat.label_for(custom_field.field_format)) %></td>
+        <td align="center"><%= l(custom_field.format.label) %></td>
         <td align="center"><%= checked_image custom_field.is_required? %></td>
         <td align="center" style="width:15%;"><%= reorder_links('p_spec_issue_custom_field', {:controller => :project_specific_fields, :action => 'update', :id => custom_field}, :put) %></td>
         <%if User.current().allowed_to?(:delete_project_custom_fields, @project) %>
@@ -23,7 +23,7 @@
         <% end %>
       <%else %>
         <td><%= h(custom_field.name) %></td>
-        <td align="center"><%= l(Redmine::CustomFieldFormat.label_for(custom_field.field_format)) %></td>
+        <td align="center"><%= l(custom_field.format.label) %></td>
         <td align="center"><%= checked_image custom_field.is_required? %></td>
         <td align="center" style="width:15%;"></td>
         <%if User.current().allowed_to?(:delete_project_custom_fields, @project) %>
