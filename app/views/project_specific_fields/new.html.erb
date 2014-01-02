@@ -4,7 +4,6 @@
 <%= render :partial => 'custom_fields/form', :locals => { :f => f } %>
 <%= render :partial => 'issue_specific_options', :locals => { :f => f } %>
 <%= hidden_field_tag 'type', @custom_field.type %>
-<%= submit_tag l(:button_save) %>
 <% end %>
 
 <%= javascript_tag do %>
