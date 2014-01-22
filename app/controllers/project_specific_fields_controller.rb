@@ -77,6 +77,6 @@ class ProjectSpecificFieldsController < ApplicationController
   end
   
   def redirect_to_index
-    redirect_to "/projects/#{@project.identifier}/settings/custom_fields"
+    redirect_to :controller => :projects, :action => :settings, :id => @project.identifier, :tab => :custom_fields
   end
 end
