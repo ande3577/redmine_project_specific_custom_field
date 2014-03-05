@@ -1,8 +1,7 @@
 <h2><%= l(:label_custom_field_new) %></h2>
 
 <%= labelled_form_for [@project, @custom_field], :url => {:controller => :project_specific_fields, :action => :create, :id => @project.identifier }, :html => {:id => 'custom_field_form'} do |f| %>
-<%= render :partial => 'custom_fields/form', :locals => { :f => f } %>
-<%= render :partial => 'issue_specific_options', :locals => { :f => f } %>
+<%= render :partial => 'form', :locals => { :f => f } %>
 <%= hidden_field_tag 'type', @custom_field.type %>
 <% end %>
 
