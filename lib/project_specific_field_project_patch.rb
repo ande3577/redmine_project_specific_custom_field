@@ -5,6 +5,7 @@ module ProjectSpecificFieldProjectPatch
     base.extend(ClassMethods)
     base.send(:include, InstanceMethods)
     base.class_eval do
+      alias_method_chain :all_issue_custom_fields, :project_specific
       has_and_belongs_to_many :project_specific_issue_custom_fields,
                               :class_name => 'PSpecIssueCustomField',
                               :order => "#{CustomField.table_name}.position",
@@ -37,6 +38,10 @@ module ProjectSpecificFieldProjectPatch
     project_specific_issue_custom_fields.each do |f|
       f.destroy()
     end
+  end
+
+  def all_issue_custom_fields_with_project_specific
+    all_issue_custom_fields_without_project_specific ||= self.project_specific_issue_custom_fields
   end
   
 end
