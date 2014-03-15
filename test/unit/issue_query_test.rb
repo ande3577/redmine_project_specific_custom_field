@@ -16,7 +16,7 @@ class IssueQueryTest < ActiveSupport::TestCase
     assert @custom_field.save
     @query.reload
     final_size = IssueQuery.first.available_filters.count
-    assert_equal initial_size + 1, final_size
+    assert_not_equal initial_size, final_size
   end
   
   def test_available_columns
@@ -24,7 +24,7 @@ class IssueQueryTest < ActiveSupport::TestCase
     assert @custom_field.save
     @query.reload
     final_size = IssueQuery.first.available_columns.count
-    assert_equal initial_size + 1, final_size
+    assert_not_equal initial_size, final_size
   end
   
 end
