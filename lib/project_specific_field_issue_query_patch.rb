@@ -33,12 +33,12 @@ module ProjectSpecificIssueQueryPatch
   def available_columns_with_project_specific
     return @available_columns if @available_columns
     @available_columns = available_columns_without_project_specific
-    
     if project
       project.recursive_project_specific_issue_fields.each do |field|
         @available_columns << QueryCustomFieldColumn.new(field) if field.visible
       end
     end
+    print @available_columns.size
     
     @available_columns
   end
