@@ -59,9 +59,7 @@ class ProjectSpecificFieldsController < ApplicationController
   end
   
   def find_project
-    project_id = params[:id]
-    @project = Project.where(:identifier => project_id).first unless project_id.nil?
-    return render_404 if @project.nil?
+    @project = Project.find(params[:id])
   end
   
   def authorize
