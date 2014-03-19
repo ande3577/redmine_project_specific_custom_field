@@ -41,7 +41,9 @@ module ProjectSpecificFieldProjectPatch
   end
 
   def all_issue_custom_fields_with_project_specific
-    all_issue_custom_fields_without_project_specific ||= self.project_specific_issue_custom_fields
+    all_issue_custom_fields = all_issue_custom_fields_without_project_specific 
+    all_issue_custom_fields ||= self.project_specific_issue_custom_fields
+    all_issue_custom_fields
   end
   
 end
