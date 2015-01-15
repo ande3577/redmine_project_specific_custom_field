@@ -87,4 +87,4 @@ module ProjectSpecificFieldIssuePatch
   
 end
 
-Issue.send(:include, ProjectSpecificFieldIssuePatch)
+Issue.send(:include, ProjectSpecificFieldIssuePatch) unless Issue.included_modules.include? ProjectSpecificFieldIssuePatch

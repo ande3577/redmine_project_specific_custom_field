@@ -23,4 +23,4 @@ module ProjectSpecificFieldProjectsHelperPatch
   
 end
 
-ProjectsHelper.send(:include, ProjectSpecificFieldProjectsHelperPatch)
+ProjectsHelper.send(:include, ProjectSpecificFieldProjectsHelperPatch) unless ProjectsHelper.included_modules.include? ProjectSpecificFieldProjectsHelperPatch
