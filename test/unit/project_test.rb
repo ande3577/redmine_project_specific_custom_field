@@ -13,10 +13,6 @@ class ProjectTest < ActiveSupport::TestCase
     assert @project.project_specific_issue_custom_fields.include?(@custom_field)
   end
 
-  def test_all_issue_custom_fields_includes_custom_field
-    assert @project.all_issue_custom_fields.visible.include?(@custom_field)
-  end
-  
   def test_destoy_project
     assert_difference ['PSpecIssueCustomField.count', 'ProjectSpecificCustomFieldsProject.count'], -1 do
       @project.destroy()

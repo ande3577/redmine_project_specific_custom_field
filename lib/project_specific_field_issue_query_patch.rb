@@ -45,4 +45,4 @@ module ProjectSpecificIssueQueryPatch
   
 end
 
-IssueQuery.send(:include, ProjectSpecificIssueQueryPatch)
+IssueQuery.send(:include, ProjectSpecificIssueQueryPatch) unless IssueQuery.included_modules.include? ProjectSpecificIssueQueryPatch

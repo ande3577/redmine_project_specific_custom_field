@@ -48,4 +48,4 @@ module ProjectSpecificFieldProjectPatch
   
 end
 
-Project.send(:include, ProjectSpecificFieldProjectPatch)
+Project.send(:include, ProjectSpecificFieldProjectPatch) unless Project.included_modules.include? ProjectSpecificFieldProjectPatch
