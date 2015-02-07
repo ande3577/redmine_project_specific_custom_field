@@ -29,7 +29,7 @@ module ProjectSpecificFieldProjectPatch
     def recursive_project_specific_issue_fields_from_parent
       fields = []
       fields += self.parent.recursive_project_specific_issue_fields_from_parent unless self.parent.nil?
-      fields += self.project_specific_issue_custom_fields.sorted.all.select  { |f| f.share_with_subprojects? }
+      fields += self.project_specific_issue_custom_fields.where('project_specific_custom_fields_projects.share_with_subprojects' => true).sorted.all
       fields
     end
   end
