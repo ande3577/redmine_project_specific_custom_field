@@ -45,7 +45,7 @@ class IssueTest < ActiveSupport::TestCase
     assert !Issue.find(6).available_custom_fields.include?(@custom_field)
   end
   
-  def test_search
+  def test_search_results
     User.current = User.where(:admin => true).first
       
     issue = Issue.find(1)
@@ -53,12 +53,12 @@ class IssueTest < ActiveSupport::TestCase
     assert v.save
     
     #proof that setup is correct
-    r = Issue.search('%unable to print recipes%').first
+    r = Issue.search_results('%unable to print recipes%').first
     assert r.include?(issue)
     
     assert_equal @custom_field, PSpecIssueCustomField.where(:searchable => true).first
     
-    r = Issue.search('%1.234%').first
+    r = Issue.search_results('%1.234%').first
     assert r.include?(issue)
   end
   
