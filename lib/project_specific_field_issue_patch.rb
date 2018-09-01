@@ -7,14 +7,14 @@ module ProjectSpecificFieldIssuePatch
     base.class_eval do
       alias_method_chain :available_custom_fields, :project_specific
       class << self
-        alias_method_chain :search, :project_specific
+        alias_method_chain :search_results, :project_specific
       end
     end
   end
   
   module ClassMethods
-    def search_with_project_specific(tokens, projects=nil, options={})
-      resultsList = search_without_project_specific(tokens, projects, options)
+    def search_results_with_project_specific(tokens, user=User.current, projects=nil, options={})
+      resultsList = search_results_without_project_specific(tokens, user=User.current, projects=nil, options={})
       results  = resultsList[0]
       results_count  = resultsList[1]
       
